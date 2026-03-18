@@ -63,7 +63,8 @@ jobs:
             libgl1-mesa-dev \
             libasound2-dev \
             libxss-dev \
-            libxcursor-dev
+            libxcursor-dev \
+            libxxf86vm-dev
 
       - name: Create build directory
         run: mkdir -p ${{ env.BUILD_DIR }}
