@@ -4,6 +4,7 @@ A desktop application for creating and managing ball pattern layouts on a grid.
 
 Check the home page for a more detailed description URL: https://dotoca.net/optigrid
 
+ ![optigrid_window](https://github.com/xvoland/optigrid/blob/main/images/optigrid_window.jpg)
 
 ## Features
 
