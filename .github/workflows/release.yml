@@ -70,7 +70,7 @@ jobs:
         with:
           draft: false
           prerelease: false
-          overwrite: true
+          overwrite_files: true
           generate_release_notes: false
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: ${{ env.BUILD_DIR }}/${{ matrix.artifact }}
