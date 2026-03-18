@@ -1,6 +1,6 @@
 /*
 Copyright © 2026, Vitalii Tereshchuk | DOTOCA.NET All rights reserved.
-Homepage: https://dotoca.net/grid-optical-illusion-app
+Homepage: https://dotoca.net/optigrid
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -389,6 +389,21 @@ func (g *Game) Layout(w, h int) (int, int) {
 }
 
 func main() {
+	fmt.Println("─────────────────────────────────────────────────")
+	fmt.Println("'Grid' Optical Illusion - Pattern Studio")
+	fmt.Println("Copyright © 2026, Vitalii Tereshchuk | DOTOCA.NET")
+	fmt.Println("Homepage: https://dotoca.net/optigrid")
+	fmt.Println("─────────────────────────────────────────────────")
+	fmt.Println("Controls:")
+	fmt.Println("  Click on cell  - Toggle pattern")
+	fmt.Println("  1-9, 0        - Load slot")
+	fmt.Println("  Shift+1-0      - Save slot")
+	fmt.Println("  A             - Toggle auto mode")
+	fmt.Println("  C             - Clear board")
+	fmt.Println("  [ / ]         - Resize horizontal")
+	fmt.Println("  - / +         - Resize vertical")
+	fmt.Println("─────────────────────────────────────────────────")
+
 	ebiten.SetWindowTitle("'Grid' Optical Illusion - Pattern Studio")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
