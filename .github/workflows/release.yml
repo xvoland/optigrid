@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name (e.g. v0.1.0)'
+        required: true
+        default: 'v0.1.0'
 
 env:
   APP_NAME: optigrid
@@ -29,6 +34,16 @@ jobs:
             goos: linux
             goarch: amd64
             artifact: optigrid_linux_amd64
+            ldflags: "-s -w"
+          - os: macos-14
+            goos: darwin
+            goarch: arm64
+            artifact: optigrid_macos_arm64
+            ldflags: "-s -w"
+          - os: macos-latest
+            goos: darwin
+            goarch: amd64
+            artifact: optigrid_macos_amd64
             ldflags: "-s -w"
 
     steps:
@@ -96,8 +111,11 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+          tag_name: ${{ github.event.inputs.tag_name || replace('refs/tags/', '', github.ref) }}
           files: |
             artifacts/optigrid_windows_amd64.exe
             artifacts/optigrid_linux_amd64
+            artifacts/optigrid_macos_amd64
+            artifacts/optigrid_macos_arm64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
