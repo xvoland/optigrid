@@ -30,18 +30,6 @@ jobs:
             goarch: amd64
             artifact: optigrid_linux_amd64
             ldflags: "-s -w"
-          - os: macos-latest
-            goos: darwin
-            goarch: amd64
-            artifact: optigrid_macos_amd64
-            ldflags: "-s -w"
-          - os: macos-latest
-            goos: darwin
-            goarch: arm64
-            artifact: optigrid_macos_arm64
-            ldflags: "-s -w"
-        exclude:
-          - os: macos-latest
 
     steps:
       - name: Checkout
@@ -70,12 +58,6 @@ jobs:
 
       - name: Create build directory
         run: mkdir -p ${{ env.BUILD_DIR }}
-
-      - name: Fix gtar on Apple Silicon
-        if: matrix.os == 'macos-latest'
-        run: |
-          sudo rm -f /opt/homebrew/bin/gtar 2>/dev/null || true
-          sudo ln -sf /usr/bin/tar /opt/homebrew/bin/gtar 2>/dev/null || true
 
       - name: Build
         run: go build -ldflags="${{ matrix.ldflags }}" -o ${{ env.BUILD_DIR }}/${{ matrix.artifact }} ${{ env.SRC }}
