@@ -11,6 +11,7 @@ env:
   SRC: main.go
   BUILD_DIR: build
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  GITHUB_OUTPUT: ''
 
 jobs:
   build:
@@ -75,7 +76,7 @@ jobs:
             ${{ env.SRC }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4-with-fixes
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
           path: ${{ env.BUILD_DIR }}/${{ matrix.artifact }}
@@ -91,7 +92,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4-with-fixes
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 
