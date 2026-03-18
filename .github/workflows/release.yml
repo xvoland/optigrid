@@ -111,7 +111,7 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
-          tag_name: ${{ github.event.inputs.tag_name || replace('refs/tags/', '', github.ref) }}
+          tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
           files: |
             artifacts/optigrid_windows_amd64.exe
             artifacts/optigrid_linux_amd64
