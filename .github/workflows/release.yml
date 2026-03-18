@@ -76,11 +76,11 @@ jobs:
           sudo ln -sf /usr/bin/tar /opt/homebrew/bin/gtar 2>/dev/null || true
 
       - name: Build
-        run: |
-          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} CGO_ENABLED=1 \
-            go build -ldflags="${{ matrix.ldflags }}" \
-            -o ${{ env.BUILD_DIR }}/${{ matrix.artifact }} \
-            ${{ env.SRC }}
+        run: go build -ldflags="${{ matrix.ldflags }}" -o ${{ env.BUILD_DIR }}/${{ matrix.artifact }} ${{ env.SRC }}
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: '1'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
