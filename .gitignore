@@ -30,3 +30,8 @@ go.work.sum
 *.png
 *.gif
 .images
+
+# ignore build
+build/
+*.dmg
+*.app
