@@ -10,8 +10,6 @@ env:
   APP_NAME: optigrid
   SRC: main.go
   BUILD_DIR: build
-  LDFLAGS: "-s -w"
-  WIN_LDFLAGS: "-s -w -H windowsgui"
 
 jobs:
   build:
@@ -24,22 +22,22 @@ jobs:
             goos: windows
             goarch: amd64
             artifact: optigrid_windows_amd64.exe
-            ldflags: ${{ env.WIN_LDFLAGS }}
+            ldflags: "-s -w -H windowsgui"
           - os: ubuntu-latest
             goos: linux
             goarch: amd64
             artifact: optigrid_linux_amd64
-            ldflags: ${{ env.LDFLAGS }}
+            ldflags: "-s -w"
           - os: macos-latest
             goos: darwin
             goarch: amd64
             artifact: optigrid_macos_amd64
-            ldflags: ${{ env.LDFLAGS }}
+            ldflags: "-s -w"
           - os: macos-latest
             goos: darwin
             goarch: arm64
             artifact: optigrid_macos_arm64
-            ldflags: ${{ env.LDFLAGS }}
+            ldflags: "-s -w"
 
     steps:
       - name: Checkout
