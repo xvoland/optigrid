@@ -2,7 +2,7 @@
 
 A desktop application for creating and managing ball pattern layouts on a grid.
 
-Check the home page for a more detailed description URL: https://dotoca.net/optigrid
+Check the **home page** for a more detailed description URL: https://dotoca.net/optigrid
 
  ![optigrid_window](https://github.com/xvoland/optigrid/blob/main/images/optigrid_window.jpg)
 
@@ -53,9 +53,18 @@ With 8 ball states per cell (including state 7 with all 4 balls), you can create
 ## Build
 
 ```bash
-go mod init pattern-studio
+mkdir -p ./build
+make darwin		 # for macOS
+make windows 	 # for Windows
+make linux 		 # for Linux
+```
+
+OR
+
+```bash
+go mod init optigrid
 go mod tidy
-go build -o pattern-studio
+go build -o optigrid
 ```
 
 ## Requirements
