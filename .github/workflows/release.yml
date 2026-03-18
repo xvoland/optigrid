@@ -15,8 +15,7 @@ env:
   APP_NAME: optigrid
   SRC: main.go
   BUILD_DIR: build
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-  GITHUB_OUTPUT: ''
+  GO_VERSION: '1.22'
 
 jobs:
   build:
@@ -26,24 +25,16 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            goos: windows
-            goarch: amd64
             artifact: optigrid_windows_amd64.exe
             ldflags: "-s -w -H windowsgui"
           - os: ubuntu-latest
-            goos: linux
-            goarch: amd64
             artifact: optigrid_linux_amd64
             ldflags: "-s -w"
-          - os: macos-14
-            goos: darwin
-            goarch: arm64
-            artifact: optigrid_macos_arm64
-            ldflags: "-s -w"
           - os: macos-latest
-            goos: darwin
-            goarch: amd64
             artifact: optigrid_macos_amd64
+            ldflags: "-s -w"
+          - os: macos-14
+            artifact: optigrid_macos_arm64
             ldflags: "-s -w"
 
     steps:
@@ -53,69 +44,32 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: ${{ env.GO_VERSION }}
 
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libx11-dev \
-            libxcursor-dev \
-            libxrandr-dev \
-            libxinerama-dev \
-            libxi-dev \
-            libgl1-mesa-dev \
-            libasound2-dev \
-            libxss-dev \
-            libxcursor-dev \
-            libxxf86vm-dev
-
-      - name: Create build directory
-        run: mkdir -p ${{ env.BUILD_DIR }}
+            libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev \
+            libxi-dev libgl1-mesa-dev libasound2-dev libxss-dev libxxf86vm-dev
 
       - name: Build
-        run: go build -ldflags="${{ matrix.ldflags }}" -o ${{ env.BUILD_DIR }}/${{ matrix.artifact }} ${{ env.SRC }}
         env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
+          GOOS: ${{ matrix.os == 'windows-latest' && 'windows' || matrix.os == 'ubuntu-latest' && 'linux' || 'darwin' }}
+          GOARCH: ${{ matrix.os == 'macos-14' && 'arm64' || 'amd64' }}
           CGO_ENABLED: '1'
+        run: |
+          mkdir -p ${{ env.BUILD_DIR }}
+          go build -ldflags="${{ matrix.ldflags }}" -o ${{ env.BUILD_DIR }}/${{ matrix.artifact }} ${{ env.SRC }}
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact }}
-          path: ${{ env.BUILD_DIR }}/${{ matrix.artifact }}
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Display structure of downloaded files
-        run: ls -la artifacts/
-
-      - name: Create Release
+      - name: Upload to Release
         uses: softprops/action-gh-release@v2
         with:
           draft: false
           prerelease: false
-          generate_release_notes: true
+          generate_release_notes: ${{ matrix.os == 'ubuntu-latest' }}
           tag_name: ${{ github.event.inputs.tag_name || github.ref_name }}
-          files: |
-            artifacts/optigrid_windows_amd64.exe
-            artifacts/optigrid_linux_amd64
-            artifacts/optigrid_macos_amd64
-            artifacts/optigrid_macos_arm64
+          files: ${{ env.BUILD_DIR }}/${{ matrix.artifact }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
