@@ -28,7 +28,7 @@ jobs:
         include:
           - os: windows-latest
             artifact: optigrid_windows_amd64.exe
-            ldflags: "-s -w -H windowsgui"
+            ldflags: "-H windowsgui"
           - os: ubuntu-latest
             artifact: optigrid_linux_amd64
             ldflags: "-s -w"
@@ -56,7 +56,6 @@ jobs:
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev \
             libxi-dev libgl1-mesa-dev libasound2-dev libxss-dev libxxf86vm-dev
 
-<<<<<<< HEAD
       # 👉 ONLY FOR WINDOWS
       - name: Generate Windows version info
         if: matrix.os == 'windows-latest'
@@ -66,7 +65,7 @@ jobs:
 
           @"
 
-      # 👉 НОВЫЙ ШАГ (ТОЛЬКО ДЛЯ WINDOWS)
+      # 👉 FOR WINDOWS
       - name: Generate Windows version info
         if: matrix.os == 'windows-latest'
         run: |
