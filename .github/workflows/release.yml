@@ -65,14 +65,13 @@ jobs:
           go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
 
           @"
-=======
+
       # 👉 НОВЫЙ ШАГ (ТОЛЬКО ДЛЯ WINDOWS)
       - name: Generate Windows version info
         if: matrix.os == 'windows-latest'
         run: |
           go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
           cat > versioninfo.json <<EOF
->>>>>>> e86e07bc5d88950fd6b17f9f359be1fdf2268741
           {
             "StringFileInfo": {
               "CompanyName": "Vitalii Tereshchuk",
