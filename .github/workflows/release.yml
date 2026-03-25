@@ -56,6 +56,7 @@ jobs:
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev \
             libxi-dev libgl1-mesa-dev libasound2-dev libxss-dev libxxf86vm-dev
 
+      # ✅ Windows metadata (без heredoc)
       - name: Generate Windows version info
         if: matrix.os == 'windows-latest'
         shell: pwsh
@@ -65,21 +66,7 @@ jobs:
 
           $version = "${{ github.ref_name }}"
 
-          $json = @"
-{
-  "StringFileInfo": {
-    "CompanyName": "Vitalii Tereshchuk",
-    "FileDescription": "Optigrid App",
-    "FileVersion": "$version",
-    "InternalName": "optigrid",
-    "OriginalFilename": "optigrid.exe",
-    "ProductName": "Optigrid",
-    "ProductVersion": "$version"
-  }
-}
-"@
-
-          $json | Out-File -Encoding utf8 versioninfo.json
+          echo "{`"StringFileInfo`":{`"CompanyName`":`"Vitalii Tereshchuk`",`"FileDescription`":`"Optigrid App`",`"FileVersion`":`"$version`",`"InternalName`":`"optigrid`",`"OriginalFilename`":`"optigrid.exe`",`"ProductName`":`"Optigrid`",`"ProductVersion`":`"$version`"}}" > versioninfo.json
 
           goversioninfo -o resource.syso versioninfo.json
 
