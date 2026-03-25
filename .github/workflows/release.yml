@@ -3,19 +3,19 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Tag name (e.g. v0.1.0)'
+        description: "Tag name (e.g. v0.1.0)"
         required: true
-        default: 'v0.1.0'
+        default: "v0.1.0"
 
 env:
   APP_NAME: optigrid
   SRC: main.go
   BUILD_DIR: build
-  GO_VERSION: '1.22'
+  GO_VERSION: "1.22"
 
 jobs:
   build:
@@ -56,11 +56,31 @@ jobs:
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev \
             libxi-dev libgl1-mesa-dev libasound2-dev libxss-dev libxxf86vm-dev
 
+      # 👉 НОВЫЙ ШАГ (ТОЛЬКО ДЛЯ WINDOWS)
+      - name: Generate Windows version info
+        if: matrix.os == 'windows-latest'
+        run: |
+          go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
+          cat > versioninfo.json <<EOF
+          {
+            "StringFileInfo": {
+              "CompanyName": "Vitalii Tereshchuk",
+              "FileDescription": "Optigrid App",
+              "FileVersion": "${{ github.ref_name }}",
+              "InternalName": "optigrid",
+              "OriginalFilename": "optigrid.exe",
+              "ProductName": "Optigrid",
+              "ProductVersion": "${{ github.ref_name }}"
+            }
+          }
+          EOF
+          goversioninfo -o resource.syso versioninfo.json
+
       - name: Build
         env:
           GOOS: ${{ matrix.os == 'windows-latest' && 'windows' || matrix.os == 'ubuntu-latest' && 'linux' || 'darwin' }}
           GOARCH: ${{ matrix.os == 'macos-14' && 'arm64' || 'amd64' }}
-          CGO_ENABLED: '1'
+          CGO_ENABLED: "1"
         run: |
           mkdir -p ${{ env.BUILD_DIR }}
           go build -ldflags="${{ matrix.ldflags }}" -o ${{ env.BUILD_DIR }}/${{ matrix.artifact }} ${{ env.SRC }}
