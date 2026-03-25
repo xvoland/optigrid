@@ -56,6 +56,7 @@ jobs:
             libx11-dev libxcursor-dev libxrandr-dev libxinerama-dev \
             libxi-dev libgl1-mesa-dev libasound2-dev libxss-dev libxxf86vm-dev
 
+<<<<<<< HEAD
       # 👉 ONLY FOR WINDOWS
       - name: Generate Windows version info
         if: matrix.os == 'windows-latest'
@@ -64,6 +65,14 @@ jobs:
           go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
 
           @"
+=======
+      # 👉 НОВЫЙ ШАГ (ТОЛЬКО ДЛЯ WINDOWS)
+      - name: Generate Windows version info
+        if: matrix.os == 'windows-latest'
+        run: |
+          go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
+          cat > versioninfo.json <<EOF
+>>>>>>> e86e07bc5d88950fd6b17f9f359be1fdf2268741
           {
             "StringFileInfo": {
               "CompanyName": "Vitalii Tereshchuk",
